@@ -14,21 +14,21 @@
         :root {
             --sidebar-width: 260px;
             --bg-primary: #ffffff;
-            --bg-secondary: #f7f7f8;
-            --bg-sidebar: #171717;
+            --bg-secondary: #c3c3c3;
+            --bg-sidebar: #ffffff;
             --text-primary: #000000;
-            --text-secondary: #676767;
-            --text-sidebar: #ececec;
+            --text-secondary: #000000;
+            --text-sidebar: #020202;
             --border-color: #e5e5e5;
             --hover-bg: #f0f0f0;
-            --hover-sidebar: #2a2a2a;
+            --hover-sidebar: #c3c3c3;
             --accent: #10a37f;
         }
 
         body {
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
             background: var(--bg-primary);
-            color: var(--text-primary);
+            color: #000000;
             overflow: hidden;
             height: 100vh;
         }
@@ -44,7 +44,6 @@
             background: var(--bg-sidebar);
             display: flex;
             flex-direction: column;
-            border-right: 1px solid rgba(0, 0, 0, 0.1);
             flex-shrink: 0;
         }
 
@@ -58,7 +57,7 @@
             background: transparent;
             border: 1px solid rgba(255, 255, 255, 0.2);
             color: var(--text-sidebar);
-            border-radius: 8px;
+            border-radius: 900px;
             cursor: pointer;
             display: flex;
             align-items: center;
@@ -88,6 +87,9 @@
             overflow: hidden;
             text-overflow: ellipsis;
             transition: background 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
         }
 
         .chat-item:hover {
@@ -96,6 +98,37 @@
 
         .chat-item.active {
             background: var(--hover-sidebar);
+        }
+
+        .chat-item-text {
+            flex: 1;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .chat-item-delete {
+            opacity: 0;
+            width: 20px;
+            height: 20px;
+            border-radius: 4px;
+            border: none;
+            background: transparent;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: opacity 0.2s;
+            flex-shrink: 0;
+            margin-left: 8px;
+        }
+
+        .chat-item:hover .chat-item-delete {
+            opacity: 1;
+        }
+
+        .chat-item-delete:hover {
+            background: rgba(0, 0, 0, 0.1);
         }
 
         .sidebar-footer {
@@ -111,6 +144,7 @@
             border-radius: 8px;
             cursor: pointer;
             transition: background 0.2s;
+            position: relative;
         }
 
         .user-menu:hover {
@@ -120,7 +154,7 @@
         .user-avatar {
             width: 32px;
             height: 32px;
-            border-radius: 4px;
+            border-radius: 30px;
             background: linear-gradient(135deg, #6e8efb, #a777e3);
             display: flex;
             align-items: center;
@@ -128,6 +162,13 @@
             color: white;
             font-weight: 600;
             font-size: 14px;
+            overflow: hidden;
+        }
+
+        .user-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
         }
 
         .user-info {
@@ -141,8 +182,183 @@
         }
 
         .user-email {
-            color: rgba(255, 255, 255, 0.5);
+            color: #000000;
             font-size: 12px;
+        }
+
+        /* Profile Modal */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+
+        .modal-overlay.active {
+            display: flex;
+        }
+
+        .modal {
+            background: white;
+            border-radius: 16px;
+            padding: 24px;
+            width: 90%;
+            max-width: 500px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+        }
+
+        .modal-title {
+            font-size: 20px;
+            font-weight: 600;
+        }
+
+        .close-btn {
+            width: 32px;
+            height: 32px;
+            border-radius: 6px;
+            border: none;
+            background: transparent;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.2s;
+        }
+
+        .close-btn:hover {
+            background: var(--hover-bg);
+        }
+
+        .profile-picture-section {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-bottom: 24px;
+            gap: 16px;
+        }
+
+        .profile-picture-large {
+            width: 120px;
+            height: 120px;
+            border-radius: 60px;
+            background: linear-gradient(135deg, #6e8efb, #a777e3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+            font-size: 48px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .profile-picture-large img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .upload-btn-container {
+            display: flex;
+            gap: 8px;
+        }
+
+        .upload-btn, .remove-btn {
+            padding: 8px 16px;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            background: white;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.2s;
+        }
+
+        .upload-btn:hover, .remove-btn:hover {
+            background: var(--hover-bg);
+        }
+
+        .remove-btn {
+            color: #dc2626;
+            border-color: #dc2626;
+        }
+
+        .remove-btn:hover {
+            background: #fef2f2;
+        }
+
+        .form-group {
+            margin-bottom: 16px;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 8px;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            font-size: 14px;
+            font-family: inherit;
+            transition: all 0.2s;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: var(--text-primary);
+            box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.05);
+        }
+
+        .modal-footer {
+            display: flex;
+            gap: 8px;
+            justify-content: flex-end;
+            margin-top: 24px;
+        }
+
+        .btn-cancel, .btn-save {
+            padding: 10px 20px;
+            border-radius: 8px;
+            border: none;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-cancel {
+            background: transparent;
+            border: 1px solid var(--border-color);
+        }
+
+        .btn-cancel:hover {
+            background: var(--hover-bg);
+        }
+
+        .btn-save {
+            background: var(--text-primary);
+            color: white;
+        }
+
+        .btn-save:hover {
+            opacity: 0.9;
         }
 
         /* Main Content */
@@ -162,6 +378,10 @@
             height: 56px;
         }
 
+        .model-selector-wrapper {
+            position: relative;
+        }
+
         .model-selector {
             display: flex;
             align-items: center;
@@ -176,6 +396,67 @@
 
         .model-selector:hover {
             background: var(--hover-bg);
+        }
+
+        .model-dropdown {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            margin-top: 4px;
+            background: white;
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            min-width: 280px;
+            display: none;
+            z-index: 100;
+        }
+
+        .model-dropdown.active {
+            display: block;
+        }
+
+        .model-dropdown-header {
+            padding: 12px 16px;
+            border-bottom: 1px solid var(--border-color);
+            font-weight: 600;
+            font-size: 13px;
+            color: var(--text-secondary);
+        }
+
+        .model-option {
+            padding: 12px 16px;
+            cursor: pointer;
+            transition: background 0.2s;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .model-option:hover {
+            background: var(--hover-bg);
+        }
+
+        .model-option.selected {
+            background: var(--hover-bg);
+        }
+
+        .model-option-name {
+            font-weight: 600;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .model-option-description {
+            font-size: 12px;
+            color: var(--text-secondary);
+        }
+
+        .model-checkmark {
+            margin-left: auto;
+            color: var(--accent);
         }
 
         .header-actions {
@@ -238,11 +519,18 @@
             justify-content: center;
             font-weight: 600;
             font-size: 14px;
+            overflow: hidden;
         }
 
         .user-avatar-msg {
             background: linear-gradient(135deg, #6e8efb, #a777e3);
             color: white;
+        }
+
+        .user-avatar-msg img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
         }
 
         .assistant-avatar {
@@ -300,7 +588,6 @@
 
         .suggestion-card {
             padding: 16px;
-            border: 1px solid var(--border-color);
             border-radius: 12px;
             cursor: pointer;
             transition: all 0.2s;
@@ -309,7 +596,7 @@
 
         .suggestion-card:hover {
             background: var(--bg-secondary);
-            border-color: var(--text-secondary);
+            border-color: #ffffff;
         }
 
         .suggestion-title {
@@ -360,10 +647,10 @@
         .send-btn {
             position: absolute;
             right: 12px;
-            bottom: 12px;
+            bottom: 7px;
             width: 32px;
             height: 32px;
-            border-radius: 8px;
+            border-radius: 30px;
             border: none;
             background: var(--text-primary);
             color: white;
@@ -415,14 +702,26 @@
         .sidebar ::-webkit-scrollbar-thumb:hover {
             background: rgba(255, 255, 255, 0.3);
         }
+
+        #profilePictureInput {
+            display: none;
+        }
+
+        .empty-chat-history {
+            padding: 20px;
+            text-align: center;
+            color: var(--text-secondary);
+            font-size: 13px;
+        }
     </style>
 </head>
 <body>
     <div class="app-container">
         <!-- Sidebar -->
         <div class="sidebar">
+            <img src="images/logo.png" alt="thelogo" width="60" height="60" style="padding: 10px;">
             <div class="sidebar-header">
-                <button class="new-chat-btn">
+                <button class="new-chat-btn" onclick="createNewChat()">
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <path d="M12 5v14M5 12h14"/>
                     </svg>
@@ -431,20 +730,17 @@
             </div>
 
             <div class="chat-history" id="chatHistory">
-                <div class="chat-item">How do I center a div?</div>
-                <div class="chat-item">Explain quantum computing</div>
-                <div class="chat-item">Recipe for chocolate cake</div>
-                <div class="chat-item">Best practices for React hooks</div>
-                <div class="chat-item">Python sorting algorithms</div>
-                <div class="chat-item">Travel tips for Japan</div>
+                <div class="empty-chat-history">No chats yet</div>
             </div>
 
             <div class="sidebar-footer">
-                <div class="user-menu">
-                    <div class="user-avatar">U</div>
+                <div class="user-menu" id="userMenuBtn">
+                    <div class="user-avatar" id="sidebarAvatar">
+                        <span id="sidebarAvatarText">U</span>
+                    </div>
                     <div class="user-info">
-                        <div class="user-name">You</div>
-                        <div class="user-email">fakeemail@closedai.com</div>
+                        <div class="user-name" id="sidebarName">You</div>
+                        <div class="user-email" id="sidebarEmail">fakeemail@closedai.com</div>
                     </div>
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <circle cx="12" cy="12" r="1"/>
@@ -458,11 +754,44 @@
         <!-- Main Content -->
         <div class="main-content">
             <div class="header">
-                <div class="model-selector">
-                    <span>DumbGPT 4o</span>
-                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M6 9l6 6 6-6"/>
-                    </svg>
+                <div class="model-selector-wrapper">
+                    <div class="model-selector" id="modelSelector">
+                        <span id="currentModel">DumbGPT 4o</span>
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M6 9l6 6 6-6"/>
+                        </svg>
+                    </div>
+                    <div class="model-dropdown" id="modelDropdown">
+                        <div class="model-dropdown-header">Select a model</div>
+                        <div class="model-option selected" data-model="DumbGPT 4o" onclick="selectModel('DumbGPT 4o')">
+                            <div class="model-option-name">
+                                DumbGPT 4o
+                                <span class="model-checkmark" id="check-dumbgpt-4o">✓</span>
+                            </div>
+                            <div class="model-option-description">Best overall performance, multimodal</div>
+                        </div>
+                        <div class="model-option" data-model="DumbGPT 4o mini" onclick="selectModel('DumbGPT 4o mini')">
+                            <div class="model-option-name">
+                                DumbGPT 4o mini
+                                <span class="model-checkmark" id="check-dumbgpt-4o-mini" style="display: none;">✓</span>
+                            </div>
+                            <div class="model-option-description">Faster responses, great for simple tasks</div>
+                        </div>
+                        <div class="model-option" data-model="DumbGPT o1" onclick="selectModel('DumbGPT o1')">
+                            <div class="model-option-name">
+                                DumbGPT o1
+                                <span class="model-checkmark" id="check-dumbgpt-o1" style="display: none;">✓</span>
+                            </div>
+                            <div class="model-option-description">Advanced reasoning for complex problems</div>
+                        </div>
+                        <div class="model-option" data-model="DumbGPT o1 mini" onclick="selectModel('DumbGPT o1 mini')">
+                            <div class="model-option-name">
+                                DumbGPT o1 mini
+                                <span class="model-checkmark" id="check-dumbgpt-o1-mini" style="display: none;">✓</span>
+                            </div>
+                            <div class="model-option-description">Fast reasoning model</div>
+                        </div>
+                    </div>
                 </div>
                 <div class="header-actions">
                     <button class="icon-btn">
@@ -515,8 +844,52 @@
                     </button>
                 </div>
                 <div class="disclaimer">
-                    DumbGPT WILL mistakes. Check important info.
+                    DumbGPT WILL make mistakes. Check important info.
                 </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Profile Modal -->
+    <div class="modal-overlay" id="profileModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h2 class="modal-title">Edit Profile</h2>
+                <button class="close-btn" onclick="closeProfileModal()">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M18 6L6 18M6 6l12 12"/>
+                    </svg>
+                </button>
+            </div>
+
+            <div class="profile-picture-section">
+                <div class="profile-picture-large" id="modalAvatar">
+                    <span id="modalAvatarText">U</span>
+                </div>
+                <div class="upload-btn-container">
+                    <button class="upload-btn" onclick="document.getElementById('profilePictureInput').click()">
+                        Upload Photo
+                    </button>
+                    <button class="remove-btn" id="removePhotoBtn" onclick="removeProfilePicture()" style="display: none;">
+                        Remove
+                    </button>
+                </div>
+                <input type="file" id="profilePictureInput" accept="image/*" onchange="handleProfilePictureUpload(event)">
+            </div>
+
+            <div class="form-group">
+                <label class="form-label" for="profileName">Name</label>
+                <input type="text" class="form-input" id="profileName" placeholder="Your name">
+            </div>
+
+            <div class="form-group">
+                <label class="form-label" for="profileEmail">Email</label>
+                <input type="email" class="form-input" id="profileEmail" placeholder="your.email@example.com">
+            </div>
+
+            <div class="modal-footer">
+                <button class="btn-cancel" onclick="closeProfileModal()">Cancel</button>
+                <button class="btn-save" onclick="saveProfile()">Save Changes</button>
             </div>
         </div>
     </div>
@@ -527,6 +900,321 @@
         const messagesContainer = document.getElementById('messages');
         const emptyState = document.getElementById('emptyState');
         const chatContainer = document.getElementById('chatContainer');
+
+        // Profile data storage
+        let profileData = {
+            name: 'You',
+            email: 'fakeemail@closedai.com',
+            picture: null
+        };
+
+        // Model data storage
+        let currentModelName = 'DumbGPT 4o';
+
+        // Chat data storage
+        let currentChatId = null;
+        let chats = {};
+
+        // Load saved model from localStorage
+        function loadModel() {
+            const savedModel = localStorage.getItem('dumbgpt_model');
+            if (savedModel) {
+                currentModelName = savedModel;
+                selectModel(currentModelName, false);
+            }
+        }
+
+        // Save model to localStorage
+        function saveModel() {
+            localStorage.setItem('dumbgpt_model', currentModelName);
+        }
+
+        // Select a model
+        function selectModel(modelName, save = true) {
+            currentModelName = modelName;
+            document.getElementById('currentModel').textContent = modelName;
+            
+            // Update checkmarks
+            document.querySelectorAll('.model-checkmark').forEach(mark => {
+                mark.style.display = 'none';
+            });
+            
+            const modelKey = modelName.replace(/\s+/g, '-').toLowerCase();
+            const checkmark = document.getElementById(`check-${modelKey}`);
+            if (checkmark) {
+                checkmark.style.display = 'inline';
+            }
+            
+            // Update selected state
+            document.querySelectorAll('.model-option').forEach(option => {
+                option.classList.remove('selected');
+                if (option.dataset.model === modelName) {
+                    option.classList.add('selected');
+                }
+            });
+            
+            if (save) {
+                saveModel();
+            }
+            
+            closeModelDropdown();
+        }
+
+        // Toggle model dropdown
+        function toggleModelDropdown() {
+            const dropdown = document.getElementById('modelDropdown');
+            dropdown.classList.toggle('active');
+        }
+
+        // Close model dropdown
+        function closeModelDropdown() {
+            document.getElementById('modelDropdown').classList.remove('active');
+        }
+
+        // Model selector click handler
+        document.getElementById('modelSelector').addEventListener('click', function(e) {
+            e.stopPropagation();
+            toggleModelDropdown();
+        });
+
+        // Close dropdown when clicking outside
+        document.addEventListener('click', function(e) {
+            const dropdown = document.getElementById('modelDropdown');
+            const selector = document.getElementById('modelSelector');
+            
+            if (!dropdown.contains(e.target) && !selector.contains(e.target)) {
+                closeModelDropdown();
+            }
+        });
+
+        // Load profile from localStorage on page load
+        function loadProfile() {
+            const savedProfile = localStorage.getItem('dumbgpt_profile');
+            if (savedProfile) {
+                profileData = JSON.parse(savedProfile);
+                updateProfileUI();
+            }
+        }
+
+        // Save profile to localStorage
+        function saveProfileToStorage() {
+            localStorage.setItem('dumbgpt_profile', JSON.stringify(profileData));
+        }
+
+        // Update all profile UI elements
+        function updateProfileUI() {
+            // Update sidebar
+            document.getElementById('sidebarName').textContent = profileData.name;
+            document.getElementById('sidebarEmail').textContent = profileData.email;
+            
+            const sidebarAvatar = document.getElementById('sidebarAvatar');
+            const sidebarAvatarText = document.getElementById('sidebarAvatarText');
+            
+            if (profileData.picture) {
+                sidebarAvatarText.style.display = 'none';
+                sidebarAvatar.style.background = 'none';
+                sidebarAvatar.innerHTML = `<img src="${profileData.picture}" alt="Profile">`;
+            } else {
+                sidebarAvatar.style.background = 'linear-gradient(135deg, #6e8efb, #a777e3)';
+                sidebarAvatar.innerHTML = `<span id="sidebarAvatarText">${profileData.name.charAt(0).toUpperCase()}</span>`;
+            }
+
+            // Update modal
+            document.getElementById('profileName').value = profileData.name;
+            document.getElementById('profileEmail').value = profileData.email;
+            
+            const modalAvatar = document.getElementById('modalAvatar');
+            const modalAvatarText = document.getElementById('modalAvatarText');
+            
+            if (profileData.picture) {
+                modalAvatarText.style.display = 'none';
+                modalAvatar.style.background = 'none';
+                modalAvatar.innerHTML = `<img src="${profileData.picture}" alt="Profile">`;
+                document.getElementById('removePhotoBtn').style.display = 'block';
+            } else {
+                modalAvatar.style.background = 'linear-gradient(135deg, #6e8efb, #a777e3)';
+                modalAvatar.innerHTML = `<span id="modalAvatarText">${profileData.name.charAt(0).toUpperCase()}</span>`;
+                document.getElementById('removePhotoBtn').style.display = 'none';
+            }
+        }
+
+        // Open profile modal
+        function openProfileModal() {
+            document.getElementById('profileModal').classList.add('active');
+            updateProfileUI();
+        }
+
+        // Close profile modal
+        function closeProfileModal() {
+            document.getElementById('profileModal').classList.remove('active');
+        }
+
+        // Handle profile picture upload
+        function handleProfilePictureUpload(event) {
+            const file = event.target.files[0];
+            if (file && file.type.startsWith('image/')) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    profileData.picture = e.target.result;
+                    updateProfileUI();
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+
+        // Remove profile picture
+        function removeProfilePicture() {
+            profileData.picture = null;
+            updateProfileUI();
+        }
+
+        // Save profile changes
+        function saveProfile() {
+            profileData.name = document.getElementById('profileName').value || 'You';
+            profileData.email = document.getElementById('profileEmail').value || 'fakeemail@closedai.com';
+            
+            saveProfileToStorage();
+            updateProfileUI();
+            closeProfileModal();
+        }
+
+        // User menu click handler
+        document.getElementById('userMenuBtn').addEventListener('click', openProfileModal);
+
+        // Close modal when clicking outside
+        document.getElementById('profileModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeProfileModal();
+            }
+        });
+
+        // Chat Management Functions
+
+        // Generate unique ID for chats
+        function generateChatId() {
+            return 'chat_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+        }
+
+        // Load all chats from localStorage
+        function loadChats() {
+            const savedChats = localStorage.getItem('dumbgpt_chats');
+            if (savedChats) {
+                chats = JSON.parse(savedChats);
+            }
+            renderChatHistory();
+        }
+
+        // Save all chats to localStorage
+        function saveChats() {
+            localStorage.setItem('dumbgpt_chats', JSON.stringify(chats));
+        }
+
+        // Get chat title from first message
+        function getChatTitle(messages) {
+            if (messages.length > 0 && messages[0].role === 'user') {
+                let title = messages[0].content.substring(0, 50);
+                if (messages[0].content.length > 50) {
+                    title += '...';
+                }
+                return title;
+            }
+            return 'New Chat';
+        }
+
+        // Create a new chat
+        function createNewChat() {
+            const chatId = generateChatId();
+            chats[chatId] = {
+                id: chatId,
+                messages: [],
+                createdAt: Date.now(),
+                updatedAt: Date.now()
+            };
+            currentChatId = chatId;
+            saveChats();
+            renderChatHistory();
+            clearMessages();
+        }
+
+        // Load a chat
+        function loadChat(chatId) {
+            currentChatId = chatId;
+            const chat = chats[chatId];
+            
+            clearMessages();
+            
+            if (chat && chat.messages.length > 0) {
+                emptyState.style.display = 'none';
+                messagesContainer.style.display = 'block';
+                
+                chat.messages.forEach(msg => {
+                    addMessage(msg.role, msg.content, false);
+                });
+            } else {
+                emptyState.style.display = 'flex';
+                messagesContainer.style.display = 'none';
+            }
+            
+            renderChatHistory();
+        }
+
+        // Delete a chat
+        function deleteChat(chatId, event) {
+            event.stopPropagation();
+            
+            if (confirm('Are you sure you want to delete this chat?')) {
+                delete chats[chatId];
+                saveChats();
+                
+                if (currentChatId === chatId) {
+                    createNewChat();
+                } else {
+                    renderChatHistory();
+                }
+            }
+        }
+
+        // Render chat history sidebar
+        function renderChatHistory() {
+            const historyContainer = document.getElementById('chatHistory');
+            
+            const chatArray = Object.values(chats).sort((a, b) => b.updatedAt - a.updatedAt);
+            
+            if (chatArray.length === 0) {
+                historyContainer.innerHTML = '<div class="empty-chat-history">No chats yet</div>';
+                return;
+            }
+            
+            historyContainer.innerHTML = '';
+            
+            chatArray.forEach(chat => {
+                const chatItem = document.createElement('div');
+                chatItem.className = 'chat-item' + (chat.id === currentChatId ? ' active' : '');
+                chatItem.onclick = () => loadChat(chat.id);
+                
+                const chatText = document.createElement('span');
+                chatText.className = 'chat-item-text';
+                chatText.textContent = getChatTitle(chat.messages);
+                
+                const deleteBtn = document.createElement('button');
+                deleteBtn.className = 'chat-item-delete';
+                deleteBtn.innerHTML = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M3 6h18M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2"/>
+                </svg>`;
+                deleteBtn.onclick = (e) => deleteChat(chat.id, e);
+                
+                chatItem.appendChild(chatText);
+                chatItem.appendChild(deleteBtn);
+                historyContainer.appendChild(chatItem);
+            });
+        }
+
+        // Clear messages display
+        function clearMessages() {
+            messagesContainer.innerHTML = '';
+            messagesContainer.style.display = 'none';
+            emptyState.style.display = 'flex';
+        }
 
         // Enable/disable send button based on input
         userInput.addEventListener('input', () => {
@@ -553,6 +1241,11 @@
         function sendMessage() {
             const message = userInput.value.trim();
             if (!message) return;
+
+            // Create new chat if none exists
+            if (!currentChatId) {
+                createNewChat();
+            }
 
             // Hide empty state
             emptyState.style.display = 'none';
@@ -581,13 +1274,22 @@
         }
 
         // Add message to chat
-        function addMessage(role, content) {
+        function addMessage(role, content, saveToChat = true) {
             const messageDiv = document.createElement('div');
             messageDiv.className = 'message';
 
             const avatarDiv = document.createElement('div');
             avatarDiv.className = `message-avatar ${role === 'user' ? 'user-avatar-msg' : 'assistant-avatar'}`;
-            avatarDiv.textContent = role === 'user' ? 'U' : '🤖';
+            
+            if (role === 'user') {
+                if (profileData.picture) {
+                    avatarDiv.innerHTML = `<img src="${profileData.picture}" alt="Profile">`;
+                } else {
+                    avatarDiv.textContent = profileData.name.charAt(0).toUpperCase();
+                }
+            } else {
+                avatarDiv.textContent = '🤖';
+            }
 
             const contentDiv = document.createElement('div');
             contentDiv.className = 'message-content';
@@ -601,6 +1303,21 @@
 
             // Scroll to bottom
             chatContainer.scrollTop = chatContainer.scrollHeight;
+
+            // Save message to current chat
+            if (saveToChat && currentChatId) {
+                if (!chats[currentChatId].messages) {
+                    chats[currentChatId].messages = [];
+                }
+                chats[currentChatId].messages.push({
+                    role: role,
+                    content: content,
+                    timestamp: Date.now()
+                });
+                chats[currentChatId].updatedAt = Date.now();
+                saveChats();
+                renderChatHistory();
+            }
         }
 
         // Handle suggestion clicks
@@ -612,14 +1329,15 @@
             userInput.focus();
         }
 
-        // New chat functionality
-        document.querySelector('.new-chat-btn').addEventListener('click', () => {
-            messagesContainer.innerHTML = '';
-            messagesContainer.style.display = 'none';
-            emptyState.style.display = 'flex';
-            userInput.value = '';
-            sendBtn.disabled = true;
-        });
+        // Initialize on page load
+        loadProfile();
+        loadModel();
+        loadChats();
+        
+        // Start with a new chat if no chats exist
+        if (Object.keys(chats).length === 0) {
+            createNewChat();
+        }
     </script>
 </body>
 </html>
